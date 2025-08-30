@@ -139,6 +139,9 @@ blogsRouter.get("/trending", trending);
 blogsRouter.post("/", requireAuth, upload.single("image"), createBlog);
 blogsRouter.post("/:id/like", requireAuth, like);
 blogsRouter.post("/:id/comment", requireAuth, comment);
+// Additional aliases
+blogsRouter.post("/like/:id", requireAuth, like);
+blogsRouter.post("/comment/:id", requireAuth, comment);
 
 // Aliases to match required spec
 blogsRouter.post("/create", requireAuth, upload.single("image"), createBlog);
