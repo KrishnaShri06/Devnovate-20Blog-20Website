@@ -15,8 +15,8 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-zinc-900/60 border-b border-border">
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600" />
+        <Link to="/" className="flex items-center gap-2" aria-label="Devnovate home">
+          <CatLogo />
           <span className="text-lg font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
             Devnovate
           </span>
