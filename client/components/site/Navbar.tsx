@@ -1,6 +1,7 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "./ThemeToggle";
 
 export function Navbar() {
   const location = useLocation();
@@ -39,6 +40,10 @@ export function Navbar() {
           <Button onClick={() => navigate("/signup")} className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-500 hover:to-violet-500">
             Sign up
           </Button>
+          <div className="ml-1">
+            {/* Theme toggle */}
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </header>
