@@ -1,5 +1,8 @@
 import { Heart, MessageSquare } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Heart, MessageSquare } from "lucide-react";
+import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export interface Blog {
   _id: string;
