@@ -55,8 +55,6 @@ export function Navbar() {
           </Link>
         </nav>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" onClick={() => navigate("/login")}>Log in</Button>
-          <Button variant="outline" onClick={() => navigate("/signup")}>Sign up</Button>
           <Button
             onClick={() => navigate("/write")}
             className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-500 hover:to-violet-500"
@@ -66,6 +64,8 @@ export function Navbar() {
           <div className="ml-1">
             <ThemeToggle />
           </div>
+          <Button variant="ghost" onClick={() => navigate("/login")}>Log in</Button>
+          <Button variant="outline" onClick={() => navigate("/signup")}>Sign up</Button>
         </div>
       </div>
     </header>
