@@ -64,7 +64,17 @@ export function Navbar() {
         </nav>
         <div className="flex items-center gap-2">
           <Button
-            onClick={() => navigate("/write")}
+            onClick={() => {
+              try {
+                // lazy import to avoid circular
+                const { useAuth } = require("@/context/AuthContext");
+                const u = useAuth();
+                if (u.user) navigate("/write");
+                else navigate("/signup");
+              } catch {
+                navigate("/signup");
+              }
+            }}
             className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-500 hover:to-violet-500"
           >
             Write
