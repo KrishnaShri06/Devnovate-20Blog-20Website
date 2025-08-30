@@ -1,0 +1,122 @@
+import { Router, RequestHandler } from "express";
+import multer from "multer";
+import path from "path";
+import fs from "fs";
+import { Blog } from "../models/Blog";
+import { requireAuth } from "../middleware/auth";
+
+export const blogsRouter = Router();
+
+// Multer storage
+const uploadDir = path.join(process.cwd(), "uploads");
+if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, uploadDir),
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    cb(null, `${Date.now()}-${Math.random().toString(36).slice(2)}${ext}`);
+  },
+});
+const upload = multer({ storage });
+
+// Create blog (pending)
+const createBlog: RequestHandler = async (req, res) => {
+  try {
+    const { title, content, category } = req.body as { title: string; content: string; category: string };
+    const imageUrl = (req as any).file ? `/uploads/${(req as any).file.filename}` : undefined;
+    if (!title || !content || !category) return res.status(400).json({ error: "Missing fields" });
+    const author = req.auth!.sub;
+    const blog = await Blog.create({ title, content, category, imageUrl, author, status: "pending" });
+    res.json({ blog });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to submit blog" });
+  }
+};
+
+// List blogs (approved by default)
+const listBlogs: RequestHandler = async (req, res) => {
+  try {
+    const { q, category, status, mine } = req.query as any;
+    const filter: any = {};
+    if (status) filter.status = status;
+    else filter.status = "approved";
+    if (category) filter.category = category;
+    if (q) filter.$text = { $search: q };
+    if (mine && req.auth) filter.author = req.auth.sub;
+
+    const blogs = await Blog.find(filter)
+      .populate("author", "name")
+      .sort({ createdAt: -1 })
+      .limit(30)
+      .lean();
+    res.json({ blogs });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to fetch blogs" });
+  }
+};
+
+// Trending by likes + comments in last X days
+const trending: RequestHandler = async (req, res) => {
+  try {
+    const days = Number((req.query.days as string) || 7);
+    const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
+    const blogs = await Blog.aggregate([
+      { $match: { status: "approved", createdAt: { $gte: since } } },
+      {
+        $addFields: {
+          engagement: { $add: ["$likes", { $size: "$comments" }] },
+        },
+      },
+      { $sort: { engagement: -1, createdAt: -1 } },
+      { $limit: 10 },
+    ]);
+    res.json({ blogs });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to fetch trending" });
+  }
+};
+
+// Like toggle
+const like: RequestHandler = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const userId = req.auth!.sub;
+    const blog = await Blog.findById(id);
+    if (!blog) return res.status(404).json({ error: "Not found" });
+    const hasLiked = blog.likedBy.some((u) => u.toString() === userId);
+    if (hasLiked) {
+      blog.likedBy = blog.likedBy.filter((u) => u.toString() !== userId);
+      blog.likes = Math.max(0, blog.likes - 1);
+    } else {
+      blog.likedBy.push(userId as any);
+      blog.likes += 1;
+    }
+    await blog.save();
+    res.json({ likes: blog.likes, liked: !hasLiked });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to like" });
+  }
+};
+
+// Comment
+const comment: RequestHandler = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const userId = req.auth!.sub;
+    const { content } = req.body as { content: string };
+    if (!content) return res.status(400).json({ error: "Content required" });
+    const blog = await Blog.findById(id);
+    if (!blog) return res.status(404).json({ error: "Not found" });
+    blog.comments.push({ user: userId as any, content, createdAt: new Date(), _id: new (require("mongoose").Types.ObjectId)() });
+    await blog.save();
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: "Failed to comment" });
+  }
+};
+
+blogsRouter.get("/", listBlogs);
+blogsRouter.get("/trending", trending);
+blogsRouter.post("/", requireAuth, upload.single("image"), createBlog);
+blogsRouter.post("/:id/like", requireAuth, like);
+blogsRouter.post("/:id/comment", requireAuth, comment);
