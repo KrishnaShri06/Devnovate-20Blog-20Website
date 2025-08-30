@@ -21,21 +21,21 @@ export function createServer() {
   app.use(express.json({ limit: "2mb" }));
   app.use(express.urlencoded({ extended: true }));
   app.use(morgan("tiny"));
-  app.use(
-    rateLimit({
-      windowMs: 60 * 1000,
-      limit: 300,
-      standardHeaders: true,
-      legacyHeaders: false,
-    })
-  );
-
   // Static uploads
   const uploadsPath = path.join(process.cwd(), "uploads");
   app.use("/uploads", express.static(uploadsPath));
 
   // Health
   app.get("/health", (_req, res) => res.json({ ok: true }));
+
+  // API rate limiting
+  const apiLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    limit: 1000,
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+  app.use("/api", apiLimiter);
 
   // API routes
   app.get("/api/ping", (_req, res) => {
