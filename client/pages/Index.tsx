@@ -74,6 +74,23 @@ export default function Index() {
           </div>
         )}
       </section>
+
+      <section className="container py-10">
+        <div className="rounded-2xl border bg-gradient-to-r from-indigo-600 to-violet-600 p-8 text-white">
+          <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
+            <div>
+              <h3 className="text-2xl font-bold">Have an idea worth sharing?</h3>
+              <p className="mt-1 text-white/80">Write your first blog and inspire the community.</p>
+            </div>
+            <a
+              href="/write"
+              className="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-indigo-700 shadow hover:bg-white/90"
+            >
+              Start Writing
+            </a>
+          </div>
+        </div>
+      </section>
     </Layout>
   );
 }
