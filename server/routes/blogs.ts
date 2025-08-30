@@ -69,21 +69,15 @@ const listBlogs: RequestHandler = async (req, res) => {
   }
 };
 
-// Trending by likes + comments in last X days
+// Trending: approved in last 7 days, sort by likes desc, top 5
 const trending: RequestHandler = async (req, res) => {
   try {
     const days = Number((req.query.days as string) || 7);
     const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
-    const blogs = await Blog.aggregate([
-      { $match: { status: "approved", createdAt: { $gte: since } } },
-      {
-        $addFields: {
-          engagement: { $add: ["$likes", { $size: "$comments" }] },
-        },
-      },
-      { $sort: { engagement: -1, createdAt: -1 } },
-      { $limit: 10 },
-    ]);
+    const blogs = await Blog.find({ status: "approved", createdAt: { $gte: since } })
+      .sort({ likes: -1 })
+      .limit(5)
+      .lean();
     res.json({ blogs });
   } catch (e) {
     res.status(500).json({ error: "Failed to fetch trending" });
