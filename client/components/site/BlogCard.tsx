@@ -1,4 +1,3 @@
-import { Heart, MessageSquare } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Heart, MessageSquare } from "lucide-react";
 import { useState } from "react";
