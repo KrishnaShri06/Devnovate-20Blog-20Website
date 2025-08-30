@@ -26,7 +26,9 @@ export function BlogCard({ blog }: { blog: Blog }) {
   async function onLike() {
     if (!user) return navigate("/signup");
     try {
-      const res = await authFetch(`/api/blogs/like/${blog._id}`, { method: "POST" });
+      const res = await authFetch(`/api/blogs/like/${blog._id}`, {
+        method: "POST",
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Failed");
       setLikes(data.likes);
@@ -77,7 +79,8 @@ export function BlogCard({ blog }: { blog: Blog }) {
               aria-pressed={liked}
               aria-label="Like"
             >
-              <Heart className={`h-4 w-4 ${liked ? "fill-rose-600" : ""}`} /> {likes}
+              <Heart className={`h-4 w-4 ${liked ? "fill-rose-600" : ""}`} />{" "}
+              {likes}
             </button>
             <span className="inline-flex items-center gap-1">
               <MessageSquare className="h-4 w-4" /> {blog.comments?.length ?? 0}

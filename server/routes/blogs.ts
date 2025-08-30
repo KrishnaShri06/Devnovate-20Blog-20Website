@@ -74,7 +74,10 @@ const trending: RequestHandler = async (req, res) => {
   try {
     const days = Number((req.query.days as string) || 7);
     const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
-    const blogs = await Blog.find({ status: "approved", createdAt: { $gte: since } })
+    const blogs = await Blog.find({
+      status: "approved",
+      createdAt: { $gte: since },
+    })
       .sort({ likes: -1 })
       .limit(5)
       .lean();

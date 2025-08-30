@@ -38,7 +38,10 @@ export default function Write() {
       fd.append("content", content);
       fd.append("category", category);
       if (image) fd.append("image", image);
-      const res = await authFetch("/api/blogs/create", { method: "POST", body: fd });
+      const res = await authFetch("/api/blogs/create", {
+        method: "POST",
+        body: fd,
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error || "Failed to submit");
       setMessage("Submitted for review. An admin will approve it soon.");
@@ -62,10 +65,13 @@ export default function Write() {
           </p>
           {!user ? (
             <div className="mt-6 rounded-lg border bg-muted/20 p-6 text-sm">
-              You must create an account to write a blog. Please sign up or log in.
+              You must create an account to write a blog. Please sign up or log
+              in.
               <div className="mt-4 flex gap-2">
                 <Button onClick={() => navigate("/signup")}>Sign up</Button>
-                <Button variant="outline" onClick={() => navigate("/login")}>Log in</Button>
+                <Button variant="outline" onClick={() => navigate("/login")}>
+                  Log in
+                </Button>
               </div>
             </div>
           ) : (
@@ -121,7 +127,9 @@ export default function Write() {
                   {submitting ? "Submitting..." : "Submit for Review"}
                 </Button>
                 {message && (
-                  <span className="text-sm text-muted-foreground">{message}</span>
+                  <span className="text-sm text-muted-foreground">
+                    {message}
+                  </span>
                 )}
               </div>
             </form>
