@@ -23,26 +23,40 @@ export function Navbar() {
           </span>
         </Link>
         <nav className="hidden md:flex items-center gap-6">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              to={item.to}
-              className={cn(
-                "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors",
-                location.pathname === item.to && "text-foreground"
-              )}
-            >
-              {item.label}
-            </Link>
-          ))}
+          <Link
+            to="/"
+            className={cn(
+              "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors",
+              location.pathname === "/" && "text-foreground"
+            )}
+          >
+            Home
+          </Link>
+          <a href="#trending" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+            Trending
+          </a>
+          <Link
+            to="/dashboard"
+            className={cn(
+              "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors",
+              location.pathname === "/dashboard" && "text-foreground"
+            )}
+          >
+            My Articles
+          </Link>
         </nav>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" onClick={() => navigate("/login")}>Log in</Button>
-          <Button onClick={() => navigate("/signup")} className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-500 hover:to-violet-500">
-            Sign up
+          <Button variant="ghost" onClick={() => navigate("/login")}>
+            Log in
           </Button>
+          <Button
+            onClick={() => navigate("/write")}
+            className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-500 hover:to-violet-500"
+          >
+            Write
+          </Button>
+          <Button variant="outline" onClick={() => navigate("/signup")}>Sign up</Button>
           <div className="ml-1">
-            {/* Theme toggle */}
             <ThemeToggle />
           </div>
         </div>
