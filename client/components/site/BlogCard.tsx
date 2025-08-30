@@ -19,6 +19,24 @@ export interface Blog {
 export function BlogCard({ blog }: { blog: Blog }) {
   const snippet =
     blog.content.length > 160 ? blog.content.slice(0, 160) + "…" : blog.content;
+  const [likes, setLikes] = useState(blog.likes || 0);
+  const [liked, setLiked] = useState(false);
+  const { user, authFetch } = useAuth();
+  const navigate = useNavigate();
+
+  async function onLike() {
+    if (!user) return navigate("/signup");
+    try {
+      const res = await authFetch(`/api/blogs/like/${blog._id}`, { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data?.error || "Failed");
+      setLikes(data.likes);
+      setLiked(data.liked);
+    } catch {
+      // ignore
+    }
+  }
+
   return (
     <article className="group relative overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm transition hover:shadow-md">
       {blog.imageUrl ? (
