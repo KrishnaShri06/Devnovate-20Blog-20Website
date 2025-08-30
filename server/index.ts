@@ -12,6 +12,8 @@ import { adminRouter } from "./routes/admin";
 
 export function createServer() {
   const app = express();
+  // Trust proxy for proper rate limit and X-Forwarded-For in hosted envs
+  app.set("trust proxy", 1);
 
   // DB
   connectDB().catch(() => {});
