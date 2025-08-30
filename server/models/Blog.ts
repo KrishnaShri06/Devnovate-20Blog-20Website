@@ -47,4 +47,6 @@ const BlogSchema = new Schema<IBlog>(
   { timestamps: true }
 );
 
+BlogSchema.index({ title: "text", content: "text" });
+
 export const Blog = mongoose.models.Blog || mongoose.model<IBlog>("Blog", BlogSchema);
