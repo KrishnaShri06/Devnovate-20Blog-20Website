@@ -72,9 +72,14 @@ export function BlogCard({ blog }: { blog: Blog }) {
               : ""}
           </time>
           <div className="flex items-center gap-4">
-            <span className="inline-flex items-center gap-1">
-              <Heart className="h-4 w-4" /> {blog.likes}
-            </span>
+            <button
+              onClick={onLike}
+              className={`inline-flex items-center gap-1 transition ${liked ? "text-rose-600" : "hover:text-foreground"}`}
+              aria-pressed={liked}
+              aria-label="Like"
+            >
+              <Heart className={`h-4 w-4 ${liked ? "fill-rose-600" : ""}`} /> {likes}
+            </button>
             <span className="inline-flex items-center gap-1">
               <MessageSquare className="h-4 w-4" /> {blog.comments?.length ?? 0}
             </span>
