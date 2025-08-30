@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
 import { CatLogo } from "./CatLogo";
+import { AuthButtons } from "./AuthButtons";
 
 export function Navbar() {
   const location = useLocation();
@@ -71,12 +72,7 @@ export function Navbar() {
           <div className="ml-1">
             <ThemeToggle />
           </div>
-          <Button variant="ghost" onClick={() => navigate("/login")}>
-            Log in
-          </Button>
-          <Button variant="outline" onClick={() => navigate("/signup")}>
-            Sign up
-          </Button>
+          <AuthButtons />
         </div>
       </div>
     </header>
