@@ -4,10 +4,12 @@ import { cn } from "@/lib/utils";
 import { ThemeToggle } from "./ThemeToggle";
 import { CatLogo } from "./CatLogo";
 import { AuthButtons } from "./AuthButtons";
+import { useAuth } from "@/context/AuthContext";
 
 export function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const navItems = [
     { to: "/", label: "Home" },
@@ -64,17 +66,7 @@ export function Navbar() {
         </nav>
         <div className="flex items-center gap-2">
           <Button
-            onClick={() => {
-              try {
-                // lazy import to avoid circular
-                const { useAuth } = require("@/context/AuthContext");
-                const u = useAuth();
-                if (u.user) navigate("/write");
-                else navigate("/signup");
-              } catch {
-                navigate("/signup");
-              }
-            }}
+            onClick={() => (user ? navigate("/write") : navigate("/signup"))}
             className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-500 hover:to-violet-500"
           >
             Write
