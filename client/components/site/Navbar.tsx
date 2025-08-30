@@ -32,6 +32,15 @@ export function Navbar() {
           >
             Home
           </Link>
+          <Link
+            to="/explore"
+            className={cn(
+              "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors",
+              location.pathname === "/explore" && "text-foreground"
+            )}
+          >
+            Explore
+          </Link>
           <a href="#trending" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             Trending
           </a>
