@@ -1,14 +1,54 @@
 import { Layout } from "@/components/site/Layout";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Signup() {
+  const { signup } = useAuth();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+    try {
+      await signup(name, email, password);
+      window.location.href = "/dashboard";
+    } catch (err: any) {
+      setError(err.message || "Signup failed");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <Layout>
       <section className="container py-16">
         <div className="mx-auto max-w-md rounded-xl border bg-card p-6">
-          <h1 className="text-2xl font-bold">Sign up</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Create your Devnovate account. Full auth flow coming next.
-          </p>
+          <h1 className="text-2xl font-bold">Create your account</h1>
+          <form onSubmit={onSubmit} className="mt-6 grid gap-4">
+            <div>
+              <label className="text-sm font-medium">Name</label>
+              <Input value={name} onChange={(e) => setName(e.target.value)} required placeholder="Your name" />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Email</label>
+              <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Password</label>
+              <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+            </div>
+            {error && <p className="text-sm text-red-600">{error}</p>}
+            <Button type="submit" disabled={loading} className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-500 hover:to-violet-500">
+              {loading ? "Creating..." : "Create account"}
+            </Button>
+          </form>
         </div>
       </section>
     </Layout>
