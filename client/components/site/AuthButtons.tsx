@@ -16,19 +16,27 @@ export function AuthButtons() {
   if (!user) {
     return (
       <>
-        <Button variant="ghost" onClick={() => navigate("/login")}>Log in</Button>
-        <Button variant="outline" onClick={() => navigate("/signup")}>Sign up</Button>
+        <Button variant="ghost" onClick={() => navigate("/login")}>
+          Log in
+        </Button>
+        <Button variant="outline" onClick={() => navigate("/signup")}>
+          Sign up
+        </Button>
       </>
     );
   }
 
   return (
     <div className="flex items-center gap-2">
-      <Button variant="ghost" onClick={() => navigate("/dashboard")}>Dashboard</Button>
+      <Button variant="ghost" onClick={() => navigate("/dashboard")}>
+        Dashboard
+      </Button>
       <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700">
         {initials(user.name)}
       </span>
-      <Button variant="outline" onClick={logout}>Logout</Button>
+      <Button variant="outline" onClick={logout}>
+        Logout
+      </Button>
     </div>
   );
 }

@@ -1,4 +1,11 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 export interface User {
   id: string;
@@ -30,7 +37,9 @@ async function json<T>(res: Response): Promise<T> {
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [accessToken, setAccessToken] = useState<string | null>(() => localStorage.getItem(ACCESS_KEY));
+  const [accessToken, setAccessToken] = useState<string | null>(() =>
+    localStorage.getItem(ACCESS_KEY),
+  );
   const [loading, setLoading] = useState(true);
 
   const setAccess = useCallback((token: string | null) => {
@@ -41,7 +50,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const refresh = useCallback(async () => {
     // Uses refresh cookie; include credentials
-    const res = await fetch("/api/auth/refresh", { method: "POST", credentials: "include" });
+    const res = await fetch("/api/auth/refresh", {
+      method: "POST",
+      credentials: "include",
+    });
     const data = await json<{ accessToken: string }>(res);
     setAccess(data.accessToken);
   }, [setAccess]);
@@ -52,7 +64,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     try {
-      const res = await fetch("/api/auth/me", { headers: { Authorization: `Bearer ${token}` } });
+      const res = await fetch("/api/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = await json<{ user: User | null }>(res);
       setUser(data.user);
     } catch {
@@ -81,29 +95,35 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     fetchMe(accessToken);
   }, [accessToken, fetchMe]);
 
-  const login = useCallback(async (email: string, password: string) => {
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await json<{ accessToken: string; user: User }>(res);
-    setAccess(data.accessToken);
-    setUser(data.user);
-  }, [setAccess]);
+  const login = useCallback(
+    async (email: string, password: string) => {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await json<{ accessToken: string; user: User }>(res);
+      setAccess(data.accessToken);
+      setUser(data.user);
+    },
+    [setAccess],
+  );
 
-  const signup = useCallback(async (name: string, email: string, password: string) => {
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ name, email, password }),
-    });
-    const data = await json<{ accessToken: string; user: User }>(res);
-    setAccess(data.accessToken);
-    setUser(data.user);
-  }, [setAccess]);
+  const signup = useCallback(
+    async (name: string, email: string, password: string) => {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ name, email, password }),
+      });
+      const data = await json<{ accessToken: string; user: User }>(res);
+      setAccess(data.accessToken);
+      setUser(data.user);
+    },
+    [setAccess],
+  );
 
   const logout = useCallback(async () => {
     await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
@@ -116,7 +136,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const doFetch = (token?: string | null) =>
         fetch(input, {
           ...(init || {}),
-          headers: { ...(init?.headers || {}), ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+          headers: {
+            ...(init?.headers || {}),
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
         });
 
       let res = await doFetch(accessToken);
@@ -130,12 +153,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
       return res;
     },
-    [accessToken, refresh]
+    [accessToken, refresh],
   );
 
   const value = useMemo<AuthContextValue>(
-    () => ({ user, accessToken, loading, login, signup, logout, refresh, authFetch }),
-    [user, accessToken, loading, login, signup, logout, refresh, authFetch]
+    () => ({
+      user,
+      accessToken,
+      loading,
+      login,
+      signup,
+      logout,
+      refresh,
+      authFetch,
+    }),
+    [user, accessToken, loading, login, signup, logout, refresh, authFetch],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

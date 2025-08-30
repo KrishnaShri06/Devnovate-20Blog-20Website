@@ -144,7 +144,9 @@ blogsRouter.post("/:id/comment", requireAuth, comment);
 blogsRouter.post("/create", requireAuth, upload.single("image"), createBlog);
 blogsRouter.get("/my", requireAuth, async (req, res) => {
   try {
-    const blogs = await Blog.find({ author: req.auth!.sub }).sort({ createdAt: -1 }).lean();
+    const blogs = await Blog.find({ author: req.auth!.sub })
+      .sort({ createdAt: -1 })
+      .lean();
     res.json({ blogs });
   } catch (e) {
     res.status(500).json({ error: "Failed to fetch my blogs" });
@@ -152,24 +154,39 @@ blogsRouter.get("/my", requireAuth, async (req, res) => {
 });
 blogsRouter.get("/all", async (_req, res) => {
   try {
-    const blogs = await Blog.find({ status: "approved" }).sort({ createdAt: -1 }).lean();
+    const blogs = await Blog.find({ status: "approved" })
+      .sort({ createdAt: -1 })
+      .lean();
     res.json({ blogs });
   } catch (e) {
     res.status(500).json({ error: "Failed to fetch blogs" });
   }
 });
-blogsRouter.post("/approve/:id", requireAuth, requireAdmin, async (req, res) => {
-  try {
-    const blog = await Blog.findByIdAndUpdate(req.params.id, { status: "approved" }, { new: true });
-    if (!blog) return res.status(404).json({ error: "Not found" });
-    res.json({ blog });
-  } catch (e) {
-    res.status(500).json({ error: "Failed to approve" });
-  }
-});
+blogsRouter.post(
+  "/approve/:id",
+  requireAuth,
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const blog = await Blog.findByIdAndUpdate(
+        req.params.id,
+        { status: "approved" },
+        { new: true },
+      );
+      if (!blog) return res.status(404).json({ error: "Not found" });
+      res.json({ blog });
+    } catch (e) {
+      res.status(500).json({ error: "Failed to approve" });
+    }
+  },
+);
 blogsRouter.post("/reject/:id", requireAuth, requireAdmin, async (req, res) => {
   try {
-    const blog = await Blog.findByIdAndUpdate(req.params.id, { status: "rejected" }, { new: true });
+    const blog = await Blog.findByIdAndUpdate(
+      req.params.id,
+      { status: "rejected" },
+      { new: true },
+    );
     if (!blog) return res.status(404).json({ error: "Not found" });
     res.json({ blog });
   } catch (e) {
