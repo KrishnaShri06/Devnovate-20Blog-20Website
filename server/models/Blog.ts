@@ -29,7 +29,7 @@ const CommentSchema = new Schema<IComment>(
     user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     content: { type: String, required: true },
   },
-  { timestamps: { createdAt: true, updatedAt: false } }
+  { timestamps: { createdAt: true, updatedAt: false } },
 );
 
 const BlogSchema = new Schema<IBlog>(
@@ -38,15 +38,26 @@ const BlogSchema = new Schema<IBlog>(
     content: { type: String, required: true },
     category: { type: String, required: true, index: true },
     imageUrl: { type: String },
-    author: { type: Schema.Types.ObjectId, ref: "User", required: true, index: true },
-    status: { type: String, enum: ["pending", "approved", "rejected", "hidden"], default: "pending", index: true },
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected", "hidden"],
+      default: "pending",
+      index: true,
+    },
     likes: { type: Number, default: 0, index: true },
     likedBy: [{ type: Schema.Types.ObjectId, ref: "User" }],
     comments: [CommentSchema],
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 BlogSchema.index({ title: "text", content: "text" });
 
-export const Blog = mongoose.models.Blog || mongoose.model<IBlog>("Blog", BlogSchema);
+export const Blog =
+  mongoose.models.Blog || mongoose.model<IBlog>("Blog", BlogSchema);

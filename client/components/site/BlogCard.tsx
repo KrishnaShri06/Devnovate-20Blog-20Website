@@ -14,11 +14,16 @@ export interface Blog {
 }
 
 export function BlogCard({ blog }: { blog: Blog }) {
-  const snippet = blog.content.length > 160 ? blog.content.slice(0, 160) + "…" : blog.content;
+  const snippet =
+    blog.content.length > 160 ? blog.content.slice(0, 160) + "…" : blog.content;
   return (
     <article className="group relative overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm transition hover:shadow-md">
       {blog.imageUrl ? (
-        <img src={blog.imageUrl} alt={blog.title} className="h-48 w-full object-cover" />
+        <img
+          src={blog.imageUrl}
+          alt={blog.title}
+          className="h-48 w-full object-cover"
+        />
       ) : (
         <div className="h-48 w-full bg-gradient-to-br from-indigo-50 to-violet-50" />
       )}
@@ -28,18 +33,30 @@ export function BlogCard({ blog }: { blog: Blog }) {
             {blog.category}
           </span>
           {blog.author?.name && (
-            <span className="text-xs text-muted-foreground">by {blog.author.name}</span>
+            <span className="text-xs text-muted-foreground">
+              by {blog.author.name}
+            </span>
           )}
         </div>
         <h3 className="line-clamp-2 text-lg font-semibold tracking-tight group-hover:underline">
           <Link to="#">{blog.title}</Link>
         </h3>
-        <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">{snippet}</p>
+        <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+          {snippet}
+        </p>
         <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
-          <time>{blog.createdAt ? new Date(blog.createdAt).toLocaleDateString() : ""}</time>
+          <time>
+            {blog.createdAt
+              ? new Date(blog.createdAt).toLocaleDateString()
+              : ""}
+          </time>
           <div className="flex items-center gap-4">
-            <span className="inline-flex items-center gap-1"><Heart className="h-4 w-4" /> {blog.likes}</span>
-            <span className="inline-flex items-center gap-1"><MessageSquare className="h-4 w-4" /> {blog.comments?.length ?? 0}</span>
+            <span className="inline-flex items-center gap-1">
+              <Heart className="h-4 w-4" /> {blog.likes}
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <MessageSquare className="h-4 w-4" /> {blog.comments?.length ?? 0}
+            </span>
           </div>
         </div>
       </div>

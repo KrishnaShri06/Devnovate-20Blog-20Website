@@ -34,7 +34,8 @@ export default function Explore() {
 
   const blogs = useMemo(() => {
     const list = data?.blogs ?? [];
-    if (sort === "likes") return [...list].sort((a, b) => (b.likes || 0) - (a.likes || 0));
+    if (sort === "likes")
+      return [...list].sort((a, b) => (b.likes || 0) - (a.likes || 0));
     return list; // latest is API default
   }, [data, sort]);
 
@@ -44,7 +45,9 @@ export default function Explore() {
         <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Explore</h1>
-            <p className="mt-1 text-muted-foreground">Search and filter approved articles by category and popularity.</p>
+            <p className="mt-1 text-muted-foreground">
+              Search and filter approved articles by category and popularity.
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <label className="text-sm text-muted-foreground">Sort by</label>
@@ -62,7 +65,12 @@ export default function Explore() {
           </div>
         </div>
         <div className="mt-6">
-          <SearchAndFilter onChange={(q, c) => { setQuery(q); setCategory(c); }} />
+          <SearchAndFilter
+            onChange={(q, c) => {
+              setQuery(q);
+              setCategory(c);
+            }}
+          />
         </div>
         <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {blogs?.length ? (

@@ -22,11 +22,25 @@ const upload = multer({ storage });
 // Create blog (pending)
 const createBlog: RequestHandler = async (req, res) => {
   try {
-    const { title, content, category } = req.body as { title: string; content: string; category: string };
-    const imageUrl = (req as any).file ? `/uploads/${(req as any).file.filename}` : undefined;
-    if (!title || !content || !category) return res.status(400).json({ error: "Missing fields" });
+    const { title, content, category } = req.body as {
+      title: string;
+      content: string;
+      category: string;
+    };
+    const imageUrl = (req as any).file
+      ? `/uploads/${(req as any).file.filename}`
+      : undefined;
+    if (!title || !content || !category)
+      return res.status(400).json({ error: "Missing fields" });
     const author = req.auth!.sub;
-    const blog = await Blog.create({ title, content, category, imageUrl, author, status: "pending" });
+    const blog = await Blog.create({
+      title,
+      content,
+      category,
+      imageUrl,
+      author,
+      status: "pending",
+    });
     res.json({ blog });
   } catch (e) {
     res.status(500).json({ error: "Failed to submit blog" });
@@ -107,7 +121,12 @@ const comment: RequestHandler = async (req, res) => {
     if (!content) return res.status(400).json({ error: "Content required" });
     const blog = await Blog.findById(id);
     if (!blog) return res.status(404).json({ error: "Not found" });
-    blog.comments.push({ user: userId as any, content, createdAt: new Date(), _id: new (require("mongoose").Types.ObjectId)() });
+    blog.comments.push({
+      user: userId as any,
+      content,
+      createdAt: new Date(),
+      _id: new (require("mongoose").Types.ObjectId)(),
+    });
     await blog.save();
     res.json({ ok: true });
   } catch (e) {

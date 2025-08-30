@@ -16,7 +16,11 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-zinc-900/60 border-b border-border">
       <div className="container flex h-16 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2" aria-label="Devnovate home">
+        <Link
+          to="/"
+          className="flex items-center gap-2"
+          aria-label="Devnovate home"
+        >
           <CatLogo />
           <span className="text-lg font-extrabold tracking-tight bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
             Devnovate
@@ -27,7 +31,7 @@ export function Navbar() {
             to="/"
             className={cn(
               "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors",
-              location.pathname === "/" && "text-foreground"
+              location.pathname === "/" && "text-foreground",
             )}
           >
             Home
@@ -36,19 +40,22 @@ export function Navbar() {
             to="/explore"
             className={cn(
               "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors",
-              location.pathname === "/explore" && "text-foreground"
+              location.pathname === "/explore" && "text-foreground",
             )}
           >
             Explore
           </Link>
-          <a href="#trending" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+          <a
+            href="#trending"
+            className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+          >
             Trending
           </a>
           <Link
             to="/dashboard"
             className={cn(
               "text-sm font-medium text-muted-foreground hover:text-foreground transition-colors",
-              location.pathname === "/dashboard" && "text-foreground"
+              location.pathname === "/dashboard" && "text-foreground",
             )}
           >
             My Articles
@@ -64,8 +71,12 @@ export function Navbar() {
           <div className="ml-1">
             <ThemeToggle />
           </div>
-          <Button variant="ghost" onClick={() => navigate("/login")}>Log in</Button>
-          <Button variant="outline" onClick={() => navigate("/signup")}>Sign up</Button>
+          <Button variant="ghost" onClick={() => navigate("/login")}>
+            Log in
+          </Button>
+          <Button variant="outline" onClick={() => navigate("/signup")}>
+            Sign up
+          </Button>
         </div>
       </div>
     </header>

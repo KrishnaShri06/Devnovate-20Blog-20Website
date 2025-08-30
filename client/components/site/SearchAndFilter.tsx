@@ -2,9 +2,21 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const categories = ["All", "Technology", "Product", "Design", "Business", "AI", "Engineering"];
+const categories = [
+  "All",
+  "Technology",
+  "Product",
+  "Design",
+  "Business",
+  "AI",
+  "Engineering",
+];
 
-export function SearchAndFilter({ onChange }: { onChange: (q: string, category: string) => void }) {
+export function SearchAndFilter({
+  onChange,
+}: {
+  onChange: (q: string, category: string) => void;
+}) {
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("All");
 
@@ -28,7 +40,9 @@ export function SearchAndFilter({ onChange }: { onChange: (q: string, category: 
               onChange(q, c);
             }}
             className={`rounded-full border px-3 py-1 text-sm transition ${
-              cat === c ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"
+              cat === c
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:bg-muted"
             }`}
           >
             {c}

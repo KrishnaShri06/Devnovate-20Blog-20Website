@@ -2,7 +2,11 @@ import { RequestHandler, Router } from "express";
 import bcrypt from "bcryptjs";
 import cookieParser from "cookie-parser";
 import { User } from "../models/User";
-import { signAccessToken, signRefreshToken, verifyRefresh } from "../middleware/auth";
+import {
+  signAccessToken,
+  signRefreshToken,
+  verifyRefresh,
+} from "../middleware/auth";
 
 export const authRouter = Router();
 
@@ -11,17 +15,31 @@ authRouter.use(cookieParser());
 
 const signup: RequestHandler = async (req, res) => {
   try {
-    const { name, email, password } = req.body as { name: string; email: string; password: string };
-    if (!name || !email || !password) return res.status(400).json({ error: "Missing fields" });
+    const { name, email, password } = req.body as {
+      name: string;
+      email: string;
+      password: string;
+    };
+    if (!name || !email || !password)
+      return res.status(400).json({ error: "Missing fields" });
     const existing = await User.findOne({ email });
-    if (existing) return res.status(409).json({ error: "Email already in use" });
+    if (existing)
+      return res.status(409).json({ error: "Email already in use" });
     const passwordHash = await bcrypt.hash(password, 10);
     const user = await User.create({ name, email, passwordHash });
     const payload = { sub: user._id.toString(), role: user.role } as const;
     const access = signAccessToken(payload);
     const refresh = signRefreshToken(payload);
     setRefreshCookie(res, refresh);
-    res.json({ accessToken: access, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+    res.json({
+      accessToken: access,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (e) {
     res.status(500).json({ error: "Signup failed" });
   }
@@ -38,7 +56,15 @@ const login: RequestHandler = async (req, res) => {
     const access = signAccessToken(payload);
     const refresh = signRefreshToken(payload);
     setRefreshCookie(res, refresh);
-    res.json({ accessToken: access, user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+    res.json({
+      accessToken: access,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (e) {
     res.status(500).json({ error: "Login failed" });
   }
@@ -55,7 +81,14 @@ const me: RequestHandler = async (req, res) => {
     const decoded = jwt.verify(token, secret) as any;
     const user = await User.findById(decoded.sub).lean();
     if (!user) return res.json({ user: null });
-    return res.json({ user: { id: user._id, name: user.name, email: user.email, role: user.role } });
+    return res.json({
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (e) {
     return res.json({ user: null });
   }

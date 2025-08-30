@@ -48,10 +48,16 @@ export default function Index() {
               Innovate. Write. Inspire.
             </h1>
             <p className="mt-3 text-muted-foreground">
-              A modern platform to publish ideas, explore insights, and join the conversation.
+              A modern platform to publish ideas, explore insights, and join the
+              conversation.
             </p>
           </div>
-          <SearchAndFilter onChange={(q, c) => { setQuery(q); setCategory(c); }} />
+          <SearchAndFilter
+            onChange={(q, c) => {
+              setQuery(q);
+              setCategory(c);
+            }}
+          />
         </div>
       </section>
 
@@ -60,7 +66,9 @@ export default function Index() {
       <section className="container py-8">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-bold">Latest Articles</h2>
-          <span className="text-sm text-muted-foreground">{latest?.blogs?.length ?? 0} results</span>
+          <span className="text-sm text-muted-foreground">
+            {latest?.blogs?.length ?? 0} results
+          </span>
         </div>
         {latest?.blogs?.length ? (
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -79,8 +87,12 @@ export default function Index() {
         <div className="rounded-2xl border bg-gradient-to-r from-indigo-600 to-violet-600 p-8 text-white">
           <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
             <div>
-              <h3 className="text-2xl font-bold">Have an idea worth sharing?</h3>
-              <p className="mt-1 text-white/80">Write your first blog and inspire the community.</p>
+              <h3 className="text-2xl font-bold">
+                Have an idea worth sharing?
+              </h3>
+              <p className="mt-1 text-white/80">
+                Write your first blog and inspire the community.
+              </p>
             </div>
             <a
               href="/write"
